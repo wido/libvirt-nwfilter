@@ -1,0 +1,10 @@
+<filter name='nwfilter-test_mac' chain='mac'>
+  <uuid>85f446f8-59d2-4187-8e44-282ad68bffa5</uuid>
+  <rule action='return' direction='out' priority='500'>
+    <mac srcmacaddr='$MAC'/>
+  </rule>
+
+  <rule action='drop' direction='out' priority='500'>
+    <mac/>
+  </rule>
+</filter>

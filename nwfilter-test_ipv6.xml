@@ -1,0 +1,22 @@
+<filter name='nwfilter-test_ipv6' chain='ipv6'>
+  <uuid>8b552bc2-70a8-495e-b2b7-be85ed1065cb</uuid>
+  <rule action='return' direction='out' priority='500'>
+    <ipv6 srcipaddr='$IPV6'/>
+  </rule>
+
+  <rule action='drop' direction='out' priority='1000'/>
+
+  <rule action='accept' direction='in' priority='500'>
+    <icmp/>
+  </rule>
+
+  <rule action='accept' direction='in' priority='500'>
+    <tcp dstportstart='22'/>
+  </rule>
+
+  <rule action='drop' direction='in' priority='1000'>
+    <all/>
+  </rule>
+
+</filter>
+

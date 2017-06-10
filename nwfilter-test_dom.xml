@@ -1,0 +1,141 @@
+<domain type='kvm' id='4'>
+  <name>nwfilter-test</name>
+  <uuid>dae27024-b51d-45b4-8fa1-166e36650ce5</uuid>
+  <memory unit='KiB'>524288</memory>
+  <currentMemory unit='KiB'>524288</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <resource>
+    <partition>/machine</partition>
+  </resource>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-zesty'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <cpu mode='custom' match='exact'>
+    <model fallback='forbid'>Skylake-Client</model>
+  </cpu>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/kvm-spice</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/nwfilter-test.qcow2'/>
+      <backingStore/>
+      <target dev='vda' bus='virtio'/>
+      <alias name='virtio-disk0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </disk>
+    <controller type='usb' index='0' model='ich9-ehci1'>
+      <alias name='usb'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x7'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci1'>
+      <alias name='usb'/>
+      <master startport='0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci2'>
+      <alias name='usb'/>
+      <master startport='2'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x1'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci3'>
+      <alias name='usb'/>
+      <master startport='4'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'>
+      <alias name='pci.0'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <alias name='virtio-serial0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <mac address='52:54:00:9c:6c:e6'/>
+      <source network='guestnetwork' bridge='virbr2'/>
+      <target dev='vnet0'/>
+      <model type='virtio'/>
+      <alias name='net0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      <filterref filter='nwfilter-test'>
+        <parameter name='IP' value='192.168.200.250'/>
+        <parameter name='IPV6' value='2001:db8:100:0:5054:ff:fe9c:6ce6'/>
+      </filterref>
+    </interface>
+    <serial type='pty'>
+      <source path='/dev/pts/4'/>
+      <target port='0'/>
+      <alias name='serial0'/>
+    </serial>
+    <console type='pty' tty='/dev/pts/4'>
+      <source path='/dev/pts/4'/>
+      <target type='serial' port='0'/>
+      <alias name='serial0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0' state='disconnected'/>
+      <alias name='channel0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='tablet' bus='usb'>
+      <alias name='input0'/>
+      <address type='usb' bus='0' port='1'/>
+    </input>
+    <input type='mouse' bus='ps2'>
+      <alias name='input1'/>
+    </input>
+    <input type='keyboard' bus='ps2'>
+      <alias name='input2'/>
+    </input>
+    <graphics type='spice' port='5900' autoport='yes' listen='127.0.0.1'>
+      <listen type='address' address='127.0.0.1'/>
+      <image compression='off'/>
+    </graphics>
+    <sound model='ich6'>
+      <alias name='sound0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </sound>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' vgamem='16384' heads='1' primary='yes'/>
+      <alias name='video0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <redirdev bus='usb' type='spicevmc'>
+      <alias name='redir0'/>
+      <address type='usb' bus='0' port='2'/>
+    </redirdev>
+    <redirdev bus='usb' type='spicevmc'>
+      <alias name='redir1'/>
+      <address type='usb' bus='0' port='3'/>
+    </redirdev>
+    <memballoon model='virtio'>
+      <alias name='balloon0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+    </memballoon>
+  </devices>
+  <seclabel type='dynamic' model='apparmor' relabel='yes'>
+    <label>libvirt-dae27024-b51d-45b4-8fa1-166e36650ce5</label>
+    <imagelabel>libvirt-dae27024-b51d-45b4-8fa1-166e36650ce5</imagelabel>
+  </seclabel>
+  <seclabel type='dynamic' model='dac' relabel='yes'>
+    <label>+126:+133</label>
+    <imagelabel>+126:+133</imagelabel>
+  </seclabel>
+</domain>
+

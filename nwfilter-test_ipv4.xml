@@ -1,0 +1,21 @@
+<filter name='nwfilter-test_ipv4' chain='ipv4'>
+  <uuid>0ee9ecbe-33bb-4539-85e4-482a60a7daec</uuid>
+  <rule action='return' direction='out' priority='500'>
+    <ip srcipaddr='$IP'/>
+  </rule>
+
+  <rule action='drop' direction='out' priority='1000'/>
+
+  <rule action='accept' direction='in' priority='500'>
+    <icmp/>
+  </rule>
+
+  <rule action='accept' direction='in' priority='500'>
+    <tcp dstportstart='22'/>
+  </rule>
+
+  <rule action='drop' direction='in' priority='1000'>
+    <all/>
+  </rule>
+</filter>
+
