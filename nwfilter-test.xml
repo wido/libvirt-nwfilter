@@ -1,6 +1,11 @@
 <filter name='nwfilter-test' chain='root'>
     <uuid>a2493284-9dd5-4c20-98b5-7e70745b53de</uuid>
-    <filterref filter='nwfilter-test_mac'/>
+    <!-- These are default build-in filters from libvirt and are mainly ipv4 only-->
+    <filterref filter='no-mac-spoofing'/>
+    <filterref filter='no-arp-spoofing'/>
+    <filterref filter='no-ip-spoofing'/>
+
+    <!-- Custom filters for IPv4 and IPv6 traffic -->
     <filterref filter='nwfilter-test_ipv4'/>
     <filterref filter='nwfilter-test_ipv6'/>
 </filter>
