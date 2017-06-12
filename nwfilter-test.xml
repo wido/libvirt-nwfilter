@@ -2,8 +2,6 @@
     <uuid>a2493284-9dd5-4c20-98b5-7e70745b53de</uuid>
     <!-- These are default build-in filters from libvirt and are mainly ipv4 only-->
     <filterref filter='no-mac-spoofing'/>
-    <filterref filter='no-arp-spoofing'/>
-    <filterref filter='no-ip-spoofing'/>
 
     <!-- Custom filters for IPv4 and IPv6 traffic -->
     <filterref filter='nwfilter-test_ipv4'/>

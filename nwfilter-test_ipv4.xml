@@ -1,6 +1,9 @@
 <filter name='nwfilter-test_ipv4' chain='ipv4'>
   <uuid>0ee9ecbe-33bb-4539-85e4-482a60a7daec</uuid>
 
+  <filterref filter='no-arp-spoofing'/>
+  <filterref filter='no-ip-spoofing'/>
+
   <rule action='accept' direction='in' priority='500'>
     <icmp/>
   </rule>
@@ -9,6 +12,7 @@
     <tcp dstportstart='22'/>
   </rule>
 
+  <!-- Block all other traffic coming in -->
   <rule action='drop' direction='in' priority='1000'>
     <all/>
   </rule>
