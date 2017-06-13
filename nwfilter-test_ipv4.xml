@@ -3,6 +3,7 @@
 
   <filterref filter='no-arp-spoofing'/>
   <filterref filter='no-ip-spoofing'/>
+  <filterref filter='allow-dhcp'/>
 
   <rule action='accept' direction='in' priority='500'>
     <icmp/>
