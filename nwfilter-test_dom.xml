@@ -76,6 +76,7 @@
       <filterref filter='nwfilter-test'>
         <parameter name='IP' value='192.168.200.250'/>
         <parameter name='IPV6' value='2001:db8:100:0:5054:ff:fe9c:6ce6'/>
+        <parameter name='IPV6' value='fe80::5054:ff:fe9c:6ce6'/>
       </filterref>
     </interface>
     <serial type='pty'>

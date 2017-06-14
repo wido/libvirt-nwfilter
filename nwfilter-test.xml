@@ -1,9 +1,132 @@
-<filter name='nwfilter-test' chain='root'>
+<filter name='nwfilter-test'>
     <uuid>a2493284-9dd5-4c20-98b5-7e70745b53de</uuid>
     <!-- These are default build-in filters from libvirt and are mainly ipv4 only-->
     <filterref filter='no-mac-spoofing'/>
+    <filterref filter='no-arp-spoofing'/>
+    <filterref filter='no-ip-spoofing'/>
+    <filterref filter='allow-dhcp'/>
 
-    <!-- Custom filters for IPv4 and IPv6 traffic -->
-    <filterref filter='nwfilter-test_ipv4'/>
-    <filterref filter='nwfilter-test_ipv6'/>
+    <!-- IPv4 Rules -->
+    <rule action='return' direction='in' priority='400'>
+      <tcp state='RELATED,ESTABLISHED'/>
+    </rule>
+
+    <rule action='return' direction='in' priority='400'>
+      <udp state='RELATED,ESTABLISHED'/>
+    </rule>
+
+    <rule action='return' direction='in' priority='500'>
+      <icmp/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='500'>
+      <tcp dstportstart='22'/>
+    </rule>
+    
+    <rule action='accept' direction='in' priority='500'>
+      <tcp dstportstart='80'/>
+    </rule>
+
+    <rule action='drop' direction='in' priority='1000'>
+      <all/>
+    </rule>
+    
+    <!-- IPv6 Rules -->
+
+    <!-- 
+    1: Destination Unreachable
+    2: Packet Too Big
+    3: Time Exceeded
+    4: Parameter Problem
+    133: Router Sollicitation
+    134: Router Advertisement
+    135: Neighbor Solicitation
+    136: Neighbor Advertisement
+    -->
+
+    <!-- Always allow outbound Router Sollicitation -->
+    <rule action='accept' direction='out' priority='400'>
+     <icmpv6 dstipaddr='ff02::2' code='0' type='133'/>
+    </rule>
+
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 code='0' type='135'/>
+    </rule>
+
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 code='0' type='136'/>
+    </rule>
+
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 code='0' type='1'/>
+    </rule>
+
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 code='0' type='2'/>
+    </rule>
+    
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 code='0' type='3'/>
+    </rule>
+
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 code='0' type='4'/>
+    </rule>
+
+    <rule action='return' direction='out' priority='500'>
+      <ipv6 srcipaddr='$IPV6'/>
+    </rule>
+
+    <!-- Always allow incoming Router Advertisement -->
+    <rule action='accept' direction='out' priority='400'>
+      <icmpv6 srcipaddr='fe80::' srcipmask='64' dstipaddr='ff02::1' code='0' type='134'/>
+    </rule>
+
+    <!-- Drop outgoing Router Advertisements from VM -->
+    <rule action='drop' direction='out' priority='400'>
+      <icmpv6 type='134'/>
+    </rule>
+
+    <rule action='drop' direction='out' priority='1000'>
+      <all-ipv6/>
+    </rule>
+
+    <!-- Inbound IPv6 traffic -->
+    <!-- Basic IPv6 traffic to be allowed -->
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='135'/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='136'/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='1'/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='2'/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='3'/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='4'/>
+    </rule>
+
+    <!-- Custom rules for IPv6 -->
+    <rule action='accept' direction='in' priority='400'>
+      <icmpv6 code='0' type='128'/>
+    </rule>
+
+    <rule action='accept' direction='in' priority='500'>
+      <tcp-ipv6 dstportstart='22'/>
+    </rule>
+
+    <rule action='drop' direction='in' priority='1000'>
+      <all-ipv6/>
+    </rule>
 </filter>
