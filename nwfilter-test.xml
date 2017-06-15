@@ -1,18 +1,18 @@
-<filter name='nwfilter-test'>
+<filter name='nwfilter-test' chain='root'>
     <uuid>a2493284-9dd5-4c20-98b5-7e70745b53de</uuid>
     <!-- These are default build-in filters from libvirt and are mainly ipv4 only-->
     <filterref filter='no-mac-spoofing'/>
-    <filterref filter='no-arp-spoofing'/>
     <filterref filter='no-ip-spoofing'/>
+    <filterref filter='no-arp-spoofing'/>
     <filterref filter='allow-dhcp'/>
 
     <!-- IPv4 Rules -->
-    <rule action='return' direction='in' priority='400'>
-      <tcp state='RELATED,ESTABLISHED'/>
+    <rule action='accept' direction='out' priority='100'>
+      <all state='RELATED,ESTABLISHED'/>
     </rule>
 
-    <rule action='return' direction='in' priority='400'>
-      <udp state='RELATED,ESTABLISHED'/>
+    <rule action='accept' direction='in' priority='100'>
+      <all state='RELATED,ESTABLISHED'/>
     </rule>
 
     <rule action='return' direction='in' priority='500'>
@@ -27,7 +27,7 @@
       <tcp dstportstart='80'/>
     </rule>
 
-    <rule action='drop' direction='in' priority='1000'>
+    <rule action='reject' direction='in' priority='1000'>
       <all/>
     </rule>
     
